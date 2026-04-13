@@ -1,19 +1,22 @@
-﻿using UnityEngine;
+﻿using System.IO;
+using TutorialInfo;
 using UnityEditor;
-using System.IO;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 [CustomEditor(typeof(Readme))]
 [InitializeOnLoad]
-sealed class ReadmeEditor : Editor
+internal sealed class ReadmeEditor : Editor
 {
-    const string k_ShowedReadmeSessionStateName = "ReadmeEditor.showedReadme";
-    const string k_ReadmeSourceDirectory = "Assets/TutorialInfo";
+    private const string k_ShowedReadmeSessionStateName = "ReadmeEditor.showedReadme";
+    private const string k_ReadmeSourceDirectory = "Assets/TutorialInfo";
 
     static ReadmeEditor()
-        => EditorApplication.delayCall += SelectReadmeAutomatically;
+    {
+        EditorApplication.delayCall += SelectReadmeAutomatically;
+    }
 
-    static void SelectReadmeAutomatically()
+    private static void SelectReadmeAutomatically()
     {
         if (!SessionState.GetBool(k_ShowedReadmeSessionStateName, false))
         {
@@ -28,7 +31,7 @@ sealed class ReadmeEditor : Editor
         }
     }
 
-    static Readme SelectReadme()
+    private static Readme SelectReadme()
     {
         var ids = AssetDatabase.FindAssets("Readme t:Readme");
         if (ids.Length != 1)
@@ -38,17 +41,16 @@ sealed class ReadmeEditor : Editor
         }
 
         var readmeObject = AssetDatabase.LoadMainAssetAtPath(AssetDatabase.GUIDToAssetPath(ids[0]));
-        Selection.objects = new UnityEngine.Object[] { readmeObject };
+        Selection.objects = new[] { readmeObject };
         return (Readme)readmeObject;
     }
-    
-    void RemoveTutorial()
+
+    private void RemoveTutorial()
     {
         if (EditorUtility.DisplayDialog("Remove Readme Assets",
-            
-            $"All contents under {k_ReadmeSourceDirectory} will be removed, are you sure you want to proceed?",
-            "Proceed",
-            "Cancel"))
+                $"All contents under {k_ReadmeSourceDirectory} will be removed, are you sure you want to proceed?",
+                "Proceed",
+                "Cancel"))
         {
             if (Directory.Exists(k_ReadmeSourceDirectory))
             {
@@ -73,8 +75,13 @@ sealed class ReadmeEditor : Editor
     }
 
     //Remove ImGUI
-    protected sealed override void OnHeaderGUI() { }
-    public sealed override void OnInspectorGUI() { }
+    protected override void OnHeaderGUI()
+    {
+    }
+
+    public override void OnInspectorGUI()
+    {
+    }
 
     public override VisualElement CreateInspectorGUI()
     {
@@ -93,7 +100,7 @@ sealed class ReadmeEditor : Editor
         //Header
         VisualElement title = new();
         title.AddToClassList("title");
-        title.Add(ChainWithClass(new Image() { image = readme.icon }, "title__icon"));
+        title.Add(ChainWithClass(new Image { image = readme.icon }, "title__icon"));
         title.Add(ChainWithClass(new Label(readme.title), "title__text"));
         root.Add(title);
 
