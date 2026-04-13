@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccc3534ef3e14e798d8edb6720068281, type: 3}
+  m_Name: WindowDataList
+  m_EditorClassIdentifier: Assembly-CSharp::_Game.Systems.UI.Windows.WindowDataListOS
+  windowEntries:
+  - Id: 0
+    Prefab: {fileID: 500196410218149689, guid: ae0245b7f688d48498bf00410607c3ab, type: 3}
+  - Id: 1
+    Prefab: {fileID: 5184596197843439207, guid: f7e81713e92cb1d4199cf03d38fd5cef, type: 3}
+  - Id: 2
+    Prefab: {fileID: 2007697030391996085, guid: 26853e7f64d9c184487c96bc38ceed7b, type: 3}
+  - Id: 3
+    Prefab: {fileID: 6902369674440801181, guid: 02c3531a31554fc4889e1c7262d50e9b, type: 3}
+  - Id: 4
+    Prefab: {fileID: 1695354195024480987, guid: 936ebf8270fb43944bee781b9f5fb4f0, type: 3}
+  overlayEntries:
+  - Id: 5
+    Prefab: {fileID: 1316395973976561275, guid: e1bc80acea466804098e1f5cba0d103e, type: 3}

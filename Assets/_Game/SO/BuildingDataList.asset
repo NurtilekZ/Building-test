@@ -1,0 +1,89 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4660a46929fa41b58f356b1892c849d5, type: 3}
+  m_Name: BuildingDataList
+  m_EditorClassIdentifier: Assembly-CSharp::_Game.Features.Buildings.Data.BuildingsListSO
+  buildings:
+  - DisplayName: House
+    Description: House for people to live in
+    Prefab: {fileID: 6182689540908560728, guid: c0a765bc40a1c254290e4bda1e6ad1fe, type: 3}
+    Icon:
+    - {fileID: 21300000, guid: 53ad16bcb41076a4ca67c6dcf75506b9, type: 3}
+    Footprint: {x: 1, y: 1}
+    MaxLevel: 3
+    BuildCost: 0
+    UpgradeCostStep: 0
+  - DisplayName: Barrack
+    Description: Barrakc are used for train soldiers. Upgrade level to unlock new
+      soldiers
+    Prefab: {fileID: 6182689540908560728, guid: 72f9a0a8b3cc5364188600afa2a34f21, type: 3}
+    Icon:
+    - {fileID: 21300000, guid: 0dec6e340d7ff474ea98c21b92a877c1, type: 3}
+    - {fileID: 21300000, guid: 5951e0094f70ee54ebbf80fa29d9b8dd, type: 3}
+    - {fileID: 21300000, guid: bbeb4b765e7eeba45b359fae7f12bd4f, type: 3}
+    Footprint: {x: 2, y: 2}
+    MaxLevel: 3
+    BuildCost: 20
+    UpgradeCostStep: 2
+  - DisplayName: Market
+    Description: Market is used for trading goods and store resources
+    Prefab: {fileID: 6182689540908560728, guid: 8be18966805ddcb43806ecb5d4f1e12f, type: 3}
+    Icon:
+    - {fileID: 21300000, guid: 6fd6a4a4d72291a458c8e1544c7c4eb1, type: 3}
+    - {fileID: 21300000, guid: 55e80c2dea7465b409ee6afbc674029e, type: 3}
+    Footprint: {x: 2, y: 2}
+    MaxLevel: 2
+    BuildCost: 10
+    UpgradeCostStep: 2
+  - DisplayName: Townhall
+    Description: Townhall is the main building of the city
+    Prefab: {fileID: 6182689540908560728, guid: f3ca20474017cd54796331cfa45e1802, type: 3}
+    Icon:
+    - {fileID: 21300000, guid: eada1f86a2af8da4682c626bd2b14851, type: 3}
+    - {fileID: 21300000, guid: 654dc2bf26aae384a8cb6ba72a4bc1bc, type: 3}
+    - {fileID: 21300000, guid: 8502a31998930104986ff8ccf38bad4c, type: 3}
+    Footprint: {x: 2, y: 2}
+    MaxLevel: 3
+    BuildCost: 40
+    UpgradeCostStep: 2
+  - DisplayName: Hero Tower
+    Description: Hero Tower is used for recruit and train Heros
+    Prefab: {fileID: 6182689540908560728, guid: 7ec73282078c4924b88a1219683f8f4a, type: 3}
+    Icon:
+    - {fileID: 21300000, guid: 739208e144c1a304bb6f901f5435f012, type: 3}
+    - {fileID: 21300000, guid: 2ef2803d9dd48534e9bb85b33b11a499, type: 3}
+    Footprint: {x: 2, y: 2}
+    MaxLevel: 2
+    BuildCost: 40
+    UpgradeCostStep: 2
+  - DisplayName: Watch Tower
+    Description: Watch Tower guarantees the defence of nearby buildings
+    Prefab: {fileID: 6182689540908560728, guid: 74517e6fa38960d439d81d18428ad2a9, type: 3}
+    Icon:
+    - {fileID: 21300000, guid: 93ea2b14bec72944d9b80855ed268ce7, type: 3}
+    - {fileID: 21300000, guid: 3b50fb33b52f1774f87c4d4a5791cbdf, type: 3}
+    - {fileID: 21300000, guid: bd59d9aadae60e54aa72367fa34214e6, type: 3}
+    Footprint: {x: 1, y: 1}
+    MaxLevel: 3
+    BuildCost: 10
+    UpgradeCostStep: 2
+  - DisplayName: Workshow
+    Description: Workshop is used for creating new weapons and inventions
+    Prefab: {fileID: 6182689540908560728, guid: 8045683e1581b544984bae00b3571459, type: 3}
+    Icon:
+    - {fileID: 21300000, guid: c77ccfd7c4425464ebfad7eef39d91fb, type: 3}
+    - {fileID: 21300000, guid: 087c768f955fd8b48b779625b74a9836, type: 3}
+    - {fileID: 21300000, guid: 726bbc1f6d5693442ba385aff21fc317, type: 3}
+    Footprint: {x: 2, y: 2}
+    MaxLevel: 3
+    BuildCost: 20
+    UpgradeCostStep: 2
