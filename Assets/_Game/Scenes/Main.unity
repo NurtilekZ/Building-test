@@ -1429,8 +1429,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::_Game.Systems.Initialization.GameStartupInitializer
   gridManager: {fileID: 1680891759}
   _windowManager: {fileID: 835798604}
-  _placementManager: {fileID: 0}
-  _buildingInteractor: {fileID: 1637906997}
+  _inputActionAsset: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  _placementManager: {fileID: 358443430}
   _buildingsList: {fileID: 11400000, guid: 7fa88ee485df750499cf81dea1595888, type: 2}
   _loadMode: 1
   _clearSavesOnLoad: 0
@@ -2360,6 +2360,62 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7326308086656437384, guid: 81d960fe44e3f6b46bcda7b24988e254, type: 3}
   m_PrefabInstance: {fileID: 355320132}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &358443428
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 358443431}
+  - component: {fileID: 358443430}
+  m_Layer: 0
+  m_Name: BuildingManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &358443430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 358443428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 359087b0e2774a28af0e959248aaba5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_Game.Systems.Movement.Move
+  targetCamera: {fileID: 1637906992}
+  placementSurfaceMask:
+    serializedVersion: 2
+    m_Bits: 23
+  defaultBuildingPrefab: {fileID: 5033695729133470730, guid: f3ca20474017cd54796331cfa45e1802, type: 3}
+  rayDistance: 1000
+  startPlacementOnAwake: 0
+  placeAction: {fileID: 3001919216989983466, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  cancelAction: {fileID: -4090225696740746782, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  rotateAction: {fileID: -2185481485913320682, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  validPreviewColor: {r: 0, g: 1, b: 0, a: 0.55}
+  invalidPreviewColor: {r: 1, g: 0, b: 0, a: 0.55}
+--- !u!4 &358443431
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 358443428}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &368353545
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8997,8 +9053,6 @@ GameObject:
   - component: {fileID: 1637906992}
   - component: {fileID: 1637906991}
   - component: {fileID: 1637906996}
-  - component: {fileID: 1637906998}
-  - component: {fileID: 1637906997}
   - component: {fileID: 1637907000}
   - component: {fileID: 1637906999}
   m_Layer: 3
@@ -9128,50 +9182,6 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
---- !u!114 &1637906997
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1637906990}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cbe46ff02acd42acb0053bbe648b559a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::_Game.Systems.Movement.Rotate
-  targetCamera: {fileID: 1637906992}
-  _placementManager: {fileID: 0}
-  interactionMask:
-    serializedVersion: 2
-    m_Bits: 23
-  maxDistance: 500
-  interactAction: {fileID: 3001919216989983466, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  gridManager: {fileID: 1680891759}
---- !u!114 &1637906998
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1637906990}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 359087b0e2774a28af0e959248aaba5e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::_Game.Systems.Movement.Move
-  targetCamera: {fileID: 1637906992}
-  placementSurfaceMask:
-    serializedVersion: 2
-    m_Bits: 23
-  defaultBuildingPrefab: {fileID: 5033695729133470730, guid: c0a765bc40a1c254290e4bda1e6ad1fe, type: 3}
-  rayDistance: 1000
-  startPlacementOnAwake: 0
-  placeAction: {fileID: 3001919216989983466, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  cancelAction: {fileID: -4090225696740746782, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  rotateAction: {fileID: -2185481485913320682, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  validPreviewColor: {r: 0, g: 1, b: 0, a: 0.55}
-  invalidPreviewColor: {r: 1, g: 0, b: 0, a: 0.55}
 --- !u!114 &1637906999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9213,7 +9223,7 @@ MonoBehaviour:
   fastMoveAction: {fileID: -7471211009204490832, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   panHoldAction: {fileID: 3001919216989983466, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   lookDeltaAction: {fileID: -5630151704836100654, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  zoomAction: {fileID: 6240969308177333660, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  zoomAction: {fileID: 7040659881675835329, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   moveSpeed: 15
   fastMoveMultiplier: 2
   enableMouseDragPan: 1
@@ -9612,13 +9622,13 @@ MonoBehaviour:
   width: 10
   height: 10
   cellSize: 4
-  origin: {x: 0, y: 10, z: 0}
+  origin: {x: 0, y: 10.1, z: 0}
   initializeOnAwake: 1
   rebuildOnValidateDuringPlay: 1
   centerOriginToTransform: 1
-  enableCellClickEvents: 1
   _camera: {fileID: 1637906992}
   clickAction: {fileID: 3001919216989983466, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  mouseMoveAction: {fileID: -5630151704836100654, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   GridRebuilt:
     m_PersistentCalls:
       m_Calls: []
@@ -11702,9 +11712,10 @@ SceneRoots:
   - {fileID: 537469024}
   - {fileID: 676741053}
   - {fileID: 179151174}
+  - {fileID: 358443431}
+  - {fileID: 835798605}
   - {fileID: 1680891760}
   - {fileID: 281289174}
-  - {fileID: 835798605}
   - {fileID: 1681511990}
   - {fileID: 1876259231}
   - {fileID: 1737714134}

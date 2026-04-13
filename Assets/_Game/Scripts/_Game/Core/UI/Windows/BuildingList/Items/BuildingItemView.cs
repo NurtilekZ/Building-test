@@ -27,5 +27,10 @@ namespace Core.UI.Windows.BuildingList.Items
             _icon.sprite = data.Icon[0];
             _name.text = data.DisplayName;
         }
+
+        private void OnDestroy()
+        {
+            _button.onClick.RemoveAllListeners();
+        }
     }
 }

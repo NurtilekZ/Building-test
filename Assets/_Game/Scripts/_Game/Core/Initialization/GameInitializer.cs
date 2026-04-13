@@ -8,8 +8,8 @@ using Core.UI.Windows.HUD;
 using Game.Assets;
 using Game.Buildings.Core;
 using Game.Grid;
-using R3;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Core.Initialization
 {
@@ -26,10 +26,10 @@ namespace Core.Initialization
         [Header("Core References")]
         [SerializeField] private GridManager gridManager;
         [SerializeField] private UIWindowManager _windowManager;
+        [SerializeField] private InputActionAsset _inputActionAsset;
         
         [Header("Building System")]
         [SerializeField] private BuildingPlacementManager _placementManager;
-        [SerializeField] private BuildingInteractor _buildingInteractor;
         [SerializeField] private BuildingsListSO _buildingsList;
         
         [Header("Startup Flow")]
@@ -44,7 +44,11 @@ namespace Core.Initialization
         [SerializeField] private bool _closeOtherWindows = true;
         
         private bool _hasInitialized;
-        
+        private IGridService _gridService;
+        private IUIService _uiService;
+        private IBuildingService _buildingService;
+        private ISaveLoadService _saveLoadService;
+
         private void Start()
         {
             InitializeGameSystems();
@@ -75,14 +79,18 @@ namespace Core.Initialization
             {
                 gridManager.InitializeGrid();
             }
-
-            ServiceLocator.Instance.Get<ISaveLoadService>().TryLoadFromStartupMode(_loadMode);
-
+            
             if (_openInitialWindow && _windowManager)
             {
-                _windowManager.OpenWindow(_initialWindowId, new HUDModel { Balance = new ReactiveProperty<int>(1000) }, _closeOtherWindows);
+                _windowManager.OpenWindow(_initialWindowId, new HUDModel(), _closeOtherWindows);
             }
 
+            _placementManager.BindServices(_uiService, _gridService, _saveLoadService);
+            
+            ServiceLocator.Instance.Get<ISaveLoadService>().TryLoadFromStartupMode(_loadMode);
+            
+            _inputActionAsset.Enable();
+            
             _hasInitialized = true;
         }
 
@@ -90,10 +98,10 @@ namespace Core.Initialization
         {
             ServiceLocator locator = ServiceLocator.Instance;
 
-            locator.Register<IGridService>(new GridService(gridManager));
-            locator.Register<IBuildingService>(new BuildingService(_placementManager, _buildingsList, _buildingInteractor));
-            locator.Register<ISaveLoadService>(new SaveLoadService(gridManager, _placementManager, _buildingsList, _clearSavesOnLoad));
-            locator.Register<IUIService>(new UIService(_windowManager, _buildingsList));
+            _uiService = locator.Register<IUIService>(new UIService(_windowManager, _buildingsList));
+            _gridService = locator.Register<IGridService>(new GridService(gridManager));
+            _buildingService = locator.Register<IBuildingService>(new BuildingService(_placementManager, _buildingsList));
+            _saveLoadService = locator.Register<ISaveLoadService>(new SaveLoadService(gridManager, _placementManager, _buildingsList, _clearSavesOnLoad));
         }
 
         [ContextMenu("Save Buildings")]
@@ -111,6 +119,7 @@ namespace Core.Initialization
 
         private void OnApplicationQuit()
         {
+            _inputActionAsset.Disable();
             SaveBuildings();
         }
     }

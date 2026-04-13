@@ -15,26 +15,25 @@ namespace Core.UI.Windows.BuildingList
         public override void Open()
         {
             base.Open();
-
             View.OnCloseBtnPress += OnClickClose;
-            View.OnBuildingSelect += TryBuild;
+            View.OnStartBuild += StartPlacement;
         }
 
         public override void Close()
         {
             base.Close();
             View.OnCloseBtnPress -= OnClickClose;
-            View.OnBuildingSelect -= TryBuild;
+            View.OnStartBuild -= StartPlacement;
         }
 
-        private void TryBuild(BuildingData data)
+        private void StartPlacement(BuildingData buildingData)
         {
             IGridService gridService = ServiceLocator.Instance.Get<IGridService>();
-            Vector2Int footprint = data.GetSafeFootprint();
+            Vector2Int footprint = buildingData.GetSafeFootprint();
 
             if (gridService.CanPlaceAtCell(Model.SelectedCell, footprint))
             {
-                _buildingService.TryBuildBuilding(data, Model.SelectedCell);
+                _buildingService.StartPlacement(buildingData);
                 _uiService.CloseWindow(WindowID.BuildingsList);
             }
         }

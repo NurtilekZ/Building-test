@@ -13,10 +13,13 @@ namespace Core.Initialization.Services.Grid
         public float CellSize => _gridManager.CellSize;
         public Vector3 Origin => _gridManager.Origin;
         public event Action<Vector2Int> OnCellClicked;
+        
+        private IUIService _uiService =  ServiceLocator.Instance.Get<IUIService>();
 
         public GridService(GridManager gridManager)
         {
             _gridManager = gridManager;
+            gridManager.OnCellClicked += NotifyCellClicked;
         }
 
         public Vector2Int WorldToCell(Vector3 worldPosition)
@@ -59,9 +62,20 @@ namespace Core.Initialization.Services.Grid
             _gridManager.RemoveAtCell(cell, size);
         }
 
-        public void NotifyCellClicked(Vector2Int cell)
+        public void EnableGridClick(bool enable)
+        {
+            _gridManager.EnableGridClick(enable);
+        }
+
+
+        private void NotifyCellClicked(Vector2Int cell)
         {
             OnCellClicked?.Invoke(cell);
+            if (_uiService == null)
+            {
+                _uiService = ServiceLocator.Instance.Get<IUIService>();
+            }
+            _uiService.ShowBuildingList(cell);
         }
     }
 }

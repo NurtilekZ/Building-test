@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -33,22 +34,15 @@ namespace Game.Movement
         [SerializeField] private Vector2 xBounds = new Vector2(-100f, 100f);
         [SerializeField] private Vector2 zBounds = new Vector2(-100f, 100f);
 
-        private void OnEnable()
-        { 
-            EnableAction(moveAction);
-            EnableAction(fastMoveAction);
-            EnableAction(panHoldAction);
-            EnableAction(lookDeltaAction);
-            EnableAction(zoomAction);
+
+        private void Awake()
+        {
+            EnableControls(true);
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
-            DisableAction(moveAction);
-            DisableAction(fastMoveAction);
-            DisableAction(panHoldAction);
-            DisableAction(lookDeltaAction);
-            DisableAction(zoomAction);
+            EnableControls(false);
         }
 
         private void Update()
@@ -157,14 +151,24 @@ namespace Game.Movement
             right.Normalize();
         }
 
-        private static void EnableAction(InputActionReference actionReference)
+        private void EnableControls(bool enable)
         {
-            actionReference?.action?.Enable();
-        }
-
-        private static void DisableAction(InputActionReference actionReference)
-        {
-            actionReference?.action?.Disable();
+            if (enable)
+            {
+                moveAction.action.Enable();
+                fastMoveAction.action.Enable();
+                panHoldAction.action.Enable();
+                lookDeltaAction.action.Enable();
+                zoomAction.action.Enable();
+            }
+            else
+            {
+                moveAction.action.Disable();
+                fastMoveAction.action.Disable();
+                panHoldAction.action.Disable();
+                lookDeltaAction.action.Disable();
+                zoomAction.action.Disable();
+            }
         }
 
         private static bool ReadButton(InputActionReference actionReference)

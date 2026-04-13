@@ -1,7 +1,11 @@
 using System;
+using System.Collections.Generic;
+using Game.Buildings.Core;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Interactions;
 
 namespace Game.Grid
 {
@@ -18,11 +22,11 @@ namespace Game.Grid
         [SerializeField] private bool initializeOnAwake = true;
         [SerializeField] private bool rebuildOnValidateDuringPlay = true;
         [SerializeField] private bool centerOriginToTransform = true;
-        [SerializeField] private bool enableCellClickEvents = true;
 
         [Header("Input")]
         [SerializeField] private Camera _camera;
         [SerializeField] private InputActionReference clickAction;
+        [SerializeField] private InputActionReference mouseMoveAction;
 
         public Grid RuntimeGrid { get; private set; }
         public UnityEvent GridRebuilt;
@@ -31,9 +35,7 @@ namespace Game.Grid
         public int Width => Mathf.Max(1, width);
         public int Height => Mathf.Max(1, height);
         public float CellSize => Mathf.Max(0.01f, cellSize);
-        public Vector3 Origin => centerOriginToTransform ? origin + new Vector3((-width * 0.5f) * cellSize, 0f, (-height * 0.5f) * cellSize) : origin + transform.position;
-
-        private bool _hasClickedThisFrame;
+        public Vector3 Origin => centerOriginToTransform ? origin + new Vector3(-width, 0f, -height) * 0.5f * cellSize : origin + transform.position;
 
         private void Awake()
         {
@@ -45,47 +47,59 @@ namespace Game.Grid
 
         private void OnEnable()
         {
-            if (clickAction != null)
-            {
-                clickAction.action.Enable();
-                clickAction.action.performed += HandleClickAction;
-            }
+            EnableGridClick(true);
         }
 
         private void OnDisable()
         {
-            if (clickAction?.action != null)
+            EnableGridClick(false);
+        }
+
+        public void EnableGridClick(bool enable)
+        {
+            if (clickAction == null) return;
+            
+            if (enable)
+            {
+                clickAction.action.performed += HandleClickAction;
+            }
+            else
             {
                 clickAction.action.performed -= HandleClickAction;
-                clickAction.action.Disable();
             }
         }
 
         private void HandleClickAction(InputAction.CallbackContext context)
         {
-            if (!enableCellClickEvents || _hasClickedThisFrame)
+            if (context.interaction is TapInteraction)
             {
-                return;
-            }
+                Vector2 mousePosition = Mouse.current.position.ReadValue();
+                Ray ray = _camera.ScreenPointToRay(mousePosition);
 
-            _hasClickedThisFrame = true;
-            Vector2 mousePosition = Mouse.current.position.ReadValue();
-            Ray ray = _camera.ScreenPointToRay(mousePosition);
-
-            if (Physics.Raycast(ray, out RaycastHit hit, 1000f))
-            {
-                Vector2Int cell = WorldToCell(hit.point);
-                if (IsInBounds(cell))
+                if (Physics.Raycast(ray, out RaycastHit hit, 1000f))
                 {
-                    Debug.Log("Click 3333");
-                    OnCellClicked?.Invoke(cell);
+                    Building building = hit.collider.GetComponent<Building>();
+                    if (building)
+                    {
+                        building.Interact();
+                        return;
+                    }
+                    
+                    PointerEventData eventData = new PointerEventData(EventSystem.current);
+                    eventData.position = mousePosition;
+
+                    List<RaycastResult> results = new List<RaycastResult>();
+                    EventSystem.current.RaycastAll(eventData, results);
+
+                    bool isOverUI = results.Count > 0;
+                    
+                    Vector2Int cell = WorldToCell(hit.point);
+                    if (IsInBounds(cell) && !isOverUI)
+                    {
+                        OnCellClicked?.Invoke(cell);
+                    }
                 }
             }
-        }
-
-        private void LateUpdate()
-        {
-            _hasClickedThisFrame = false;
         }
 
         public void InitializeGrid()

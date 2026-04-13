@@ -12,14 +12,14 @@ namespace Core.Initialization.Services.SaveLoad
 {
     public class SaveLoadService : ISaveLoadService
     {
-        private GridManager _gridManager;
-        private BuildingPlacementManager _buildingPlacementManager;
+        private readonly GridManager _gridManager;
+        private readonly BuildingPlacementManager _buildingPlacementManager;
         private readonly BuildingsListSO _buildingsList;
 
-        private string _saveFileName = "buildings-save.json";
-        private bool _clearSavesOnLoad;
+        private readonly string _saveFileName = "buildings-save.json";
+        private readonly bool _clearSavesOnLoad;
 
-        private List<Building> _allBuildings = new List<Building>();
+        private readonly List<Building> _allBuildings = new();
 
         public SaveLoadService(GridManager gridManager, BuildingPlacementManager placementManager,
             BuildingsListSO buildingsList, bool clearSavesOnLoad)
@@ -36,11 +36,19 @@ namespace Core.Initialization.Services.SaveLoad
         public void SaveBuilding(Building building)
         {
             _allBuildings.Add(building);
+            foreach (var b in _allBuildings)
+            { 
+                Debug.Log($"{b.Id} - {b.Data} - {b.CurrentLevel}");
+            }
         }
         
         public void RemoveFromSaveList(Building building)
         {
             _allBuildings.Remove(building);
+            foreach (var b in _allBuildings)
+            { 
+                Debug.Log($"{b.Id} - {b.Data} - {b.CurrentLevel}");
+            }
         }
         
         public void SaveBuildings()
@@ -156,9 +164,8 @@ namespace Core.Initialization.Services.SaveLoad
                 return;
             }
 
-            for (int i = 0; i < saveData.Buildings.Count; i++)
+            foreach (var record in saveData.Buildings)
             {
-                BuildingSaveData record = saveData.Buildings[i];
                 if (record == null || string.IsNullOrWhiteSpace(record.Id))
                 {
                     continue;
@@ -182,6 +189,7 @@ namespace Core.Initialization.Services.SaveLoad
                 }
 
                 instance.RestoreProgress(record);
+                SaveBuilding(instance);
             }
         }
 

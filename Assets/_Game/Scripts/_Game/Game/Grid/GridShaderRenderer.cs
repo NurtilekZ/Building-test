@@ -70,6 +70,7 @@ namespace Game.Grid
                 gridManager.Height * gridManager.CellSize);
             
             transform.localScale = new Vector3(gridManager.Width * 0.4f, 1, gridManager.Height * 0.4f) * (gridManager.CellSize / 4) ;
+            transform.position = new Vector3(origin.x + gridManager.Width / 2.0f * gridManager.CellSize, origin.y, origin.z + gridManager.Height / 2.0f * gridManager.CellSize);
 
             _propertyBlock.SetVector(originProperty, new Vector4(origin.x, origin.y, origin.z, 0f));
             _propertyBlock.SetVector(sizeProperty, new Vector4(worldSize.x, worldSize.y, 0f, 0f));

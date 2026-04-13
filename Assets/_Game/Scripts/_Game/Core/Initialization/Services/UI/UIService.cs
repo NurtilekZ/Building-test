@@ -2,6 +2,8 @@ using System;
 using Core.UI.Windows;
 using Core.UI.Windows.BuildingInfo;
 using Core.UI.Windows.BuildingList;
+using Core.UI.Windows.BuildMode;
+using Core.UI.Windows.HUD;
 using Core.UI.Windows.Map;
 using Game.Assets;
 using Game.Buildings.Core;
@@ -35,9 +37,9 @@ namespace Core.Initialization.Services.UI
             _windowManager.OpenWindow(WindowID.Map, model, closeOthers: false);
         }
 
-        public void ShowBuildMode(Vector2Int cell)
+        public void ShowBuildMode()
         {
-            _windowManager.OpenWindow(WindowID.BuildingMode, null, closeOthers: false);
+            _windowManager.OpenWindow(WindowID.BuildingMode, new BuildModeModel(), false);
         }
 
         public void ShowActionOverlay(Building building, Transform transform)
@@ -54,6 +56,11 @@ namespace Core.Initialization.Services.UI
         {
             BuildingInfoModel model = new BuildingInfoModel(building);
             _windowManager.OpenWindow(WindowID.BuildingInfo, model);
+        }
+
+        public void ShowHUD()
+        {
+            _windowManager.OpenWindow(WindowID.HUD, new HUDModel(), false, true);
         }
     }
 }

@@ -58,7 +58,7 @@ namespace Core.UI.CoreMVP
             }
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             foreach (var disposable in _disposableList)
                 disposable?.Dispose();

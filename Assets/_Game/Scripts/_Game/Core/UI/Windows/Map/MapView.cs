@@ -1,6 +1,7 @@
 using System;
 using Core.Initialization.Services;
 using Core.UI.CoreMVP;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,27 +11,26 @@ namespace Core.UI.Windows.Map
     {
         [Header("Grid Renderer")]
         [SerializeField] private RawImage gridImage;
-        [SerializeField] private AspectRatioFitter aspectRatioFitter;
         
         [Header("Settings")]
         [SerializeField] private Button closeButton;
+
+        [Header("Visual Settings")] 
+        [SerializeField] private Color emptyColor;
+        [SerializeField] private Color occupiedColor = new(0.4f, 0.6f, 0.4f, 0.8f);
+        [SerializeField] private Color gridLineColor = new(1f, 1f, 1f, 1f);
+        [SerializeField] [Range(0.0001f, 0.5f)]private float _lineThickness = 0.2f;
         
-        [Header("Visual Settings")]
-        [SerializeField] private Color emptyColor = new Color(0.2f, 0.2f, 0.2f, 0.5f);
-        [SerializeField] private Color occupiedColor = new Color(0.4f, 0.6f, 0.4f, 0.8f);
-        [SerializeField] private Color selectedColor = new Color(0.2f, 0.6f, 0.9f, 0.9f);
-        [SerializeField] private Color gridLineColor = new Color(0.1f, 0.1f, 0.1f, 1f);
-        [SerializeField] [Range(0.01f, 0.1f)] private float gridLineWidth = 0.02f;
 
         public event Action OnCloseBtnPress;
 
         private IGridService _gridService;
+        
         private Material _gridMaterial;
         private Texture2D _occupancyTexture;
-        private Vector2Int _selectedCell = new Vector2Int(-1, -1);
         private int _cachedWidth = -1;
         private int _cachedHeight = -1;
-
+        
         private void Awake()
         {
             closeButton.onClick.AddListener(() => OnCloseBtnPress?.Invoke());
@@ -38,15 +38,11 @@ namespace Core.UI.Windows.Map
 
         private void SetupShader()
         {
-            if (gridImage == null) return;
+            if (!gridImage) return;
 
-            Shader shader = Shader.Find("UI/URP/GridShader");
-            if (shader == null)
-            {
-                shader = Shader.Find("UI/GridShader");
-            }
+            Shader shader = Shader.Find("UI/GridOccupancy");
             
-            if (shader == null)
+            if (!shader)
             {
                 Debug.LogError("MapView: Could not find 'UI/URP/GridShader'. Make sure the shader is in the project.");
                 return;
@@ -59,13 +55,21 @@ namespace Core.UI.Windows.Map
         protected override void Render()
         {
             _gridService = ServiceLocator.Instance.Get<IGridService>();
-            // SetupShader();
-            // InitializeGrid();
+
+            if (!_gridMaterial)
+            {
+                SetupShader();
+                InitializeGrid();
+            }
+            else
+            { 
+                RefreshOccupancy();
+            }
         }
 
         private void InitializeGrid()
         {
-            if (_gridService == null || _gridMaterial == null)
+            if (_gridService == null || !_gridMaterial)
             {
                 return;
             }
@@ -75,7 +79,7 @@ namespace Core.UI.Windows.Map
 
             if (width != _cachedWidth || height != _cachedHeight)
             {
-                if (_occupancyTexture != null)
+                if (_occupancyTexture)
                 {
                     Destroy(_occupancyTexture);
                 }
@@ -87,44 +91,32 @@ namespace Core.UI.Windows.Map
                 _cachedWidth = width;
                 _cachedHeight = height;
 
-                UpdateShaderProperties();
-                UpdateOccupancyTexture();
-            }
-
-            if (aspectRatioFitter != null)
-            {
-                aspectRatioFitter.aspectRatio = (float)width / height;
+                RefreshOccupancy();
             }
         }
 
         private void UpdateShaderProperties()
         {
-            if (_gridMaterial == null || _gridService == null)
+            if (!_gridMaterial || _gridService == null)
             {
                 return;
             }
 
-            _gridMaterial.SetInt("_GridWidth", _gridService.Width);
-            _gridMaterial.SetInt("_GridHeight", _gridService.Height);
-            _gridMaterial.SetColor("_BaseColor", Color.white);
-            _gridMaterial.SetColor("_EmptyColor", emptyColor);
+            _gridMaterial.SetColor("_BaseColor", emptyColor);
+            _gridMaterial.SetColor("_LineColor", gridLineColor);
             _gridMaterial.SetColor("_OccupiedColor", occupiedColor);
-            _gridMaterial.SetColor("_SelectedColor", selectedColor);
-            _gridMaterial.SetColor("_GridLineColor", gridLineColor);
-            _gridMaterial.SetFloat("_GridLineWidth", gridLineWidth);
-            _gridMaterial.SetInt("_SelectedCellX", _selectedCell.x);
-            _gridMaterial.SetInt("_SelectedCellY", _selectedCell.y);
-            _gridMaterial.SetFloat("_UseTexture", _occupancyTexture != null ? 1f : 0f);
+            _gridMaterial.SetFloat("_LineThickness", _lineThickness);
+            _gridMaterial.SetVector("_CellCount", new Vector2(_gridService.Width, _gridService.Height));
 
-            if (_occupancyTexture != null)
+            if (_occupancyTexture)
             {
-                _gridMaterial.SetTexture("_CellOccupancyTex", _occupancyTexture);
+                _gridMaterial.SetTexture("_OccupancyTex", _occupancyTexture);
             }
         }
 
         private void UpdateOccupancyTexture()
         {
-            if (_occupancyTexture == null || _gridService == null)
+            if (!_occupancyTexture || _gridService == null)
             {
                 return;
             }
@@ -139,27 +131,22 @@ namespace Core.UI.Windows.Map
                 {
                     Vector2Int cell = new Vector2Int(x, y);
                     bool isOccupied = _gridService.IsOccupied(cell);
-                    colors[y * width + x] = isOccupied ? Color.white : Color.black;
+                    colors[y * width + x] = isOccupied ? occupiedColor : emptyColor;
                 }
             }
 
+            _occupancyTexture.Reinitialize(width, height);
             _occupancyTexture.SetPixels(colors);
             _occupancyTexture.Apply();
+            
+            gridImage.rectTransform.sizeDelta = new Vector2(width , height) * _gridService.CellSize * 10;
+            gridImage.rectTransform.anchoredPosition = new Vector2((_gridService.Origin.x + width * 2) * 10, (_gridService.Origin.z + height * 2) * 10 - 8);
         }
 
         public void RefreshOccupancy()
         {
             UpdateOccupancyTexture();
-        }
-
-        private void UpdateSelectedCell(Vector2Int cell)
-        {
-            _selectedCell = cell;
-            if (_gridMaterial != null)
-            {
-                _gridMaterial.SetInt("_SelectedCellX", cell.x);
-                _gridMaterial.SetInt("_SelectedCellY", cell.y);
-            }
+            UpdateShaderProperties();
         }
 
         protected override void OnDestroy()

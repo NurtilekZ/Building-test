@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Core.Initialization.Services
 {
-    public interface IGridService
+    public interface IGridService : IService
     {
         int Width { get; }
         int Height { get; }
@@ -21,9 +21,14 @@ namespace Core.Initialization.Services
         bool CanPlaceAtCell(Vector2Int cell, Vector2Int size);
         void RemoveAtCell(Vector2Int cell, Vector2Int size);
         event Action<Vector2Int> OnCellClicked;
+        void EnableGridClick(bool enable);
     }
-    
-    public interface ISaveLoadService
+
+    public interface IService
+    {
+    }
+
+    public interface ISaveLoadService : IService
     {
         void SaveBuildings();
         void LoadBuildings();
@@ -33,23 +38,25 @@ namespace Core.Initialization.Services
         void RemoveFromSaveList(Building building);
     }
 
-    public interface IBuildingService
+    public interface IBuildingService : IService
     {
         BuildingData[] GetAvailableBuildings();
-        bool TryBuildBuilding(BuildingData data, Vector2Int cell);
-        void CancelCurrentPlacement();
         bool IsPlacing { get; }
         event Action<BuildingData, Vector2Int> OnBuildingPlaced;
+        void StartPlacement(BuildingData building);
+        void CancelCurrentPlacement();
+        bool TryBuildBuilding(BuildingData data, Vector2Int cell);
         bool TryUpgrade(Building building);
     }
 
-    public interface IUIService
+    public interface IUIService : IService
     {
         void ShowBuildingList(Vector2Int cell);
         void ShowMapWindow();
-        void ShowBuildMode(Vector2Int cell);
+        void ShowBuildMode();
         void ShowActionOverlay(Building building, Transform transform);
         void CloseWindow(WindowID id);
         void ShowBuildingInfo(Building building);
+        void ShowHUD();
     }
 }

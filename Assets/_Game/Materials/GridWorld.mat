@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Grid
+  m_Name: GridWorld
   m_Shader: {fileID: 4800000, guid: 70bbe0d33c210fc4187108f94b78a7a9, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0

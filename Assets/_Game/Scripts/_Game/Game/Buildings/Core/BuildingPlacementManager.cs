@@ -1,7 +1,9 @@
 using Core.Initialization.SaveLoad;
 using Core.Initialization.Services;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Interactions;
 
 namespace Game.Buildings.Core
 {
@@ -22,8 +24,9 @@ namespace Game.Buildings.Core
         [SerializeField] private Color validPreviewColor = new Color(0f, 1f, 0f, 0.55f);
         [SerializeField] private Color invalidPreviewColor = new Color(1f, 0f, 0f, 0.55f);
 
-        private readonly ISaveLoadService _saveLoadService = ServiceLocator.Instance.Get<ISaveLoadService>();
-        private readonly IGridService _gridService = ServiceLocator.Instance.Get<IGridService>();
+        private ISaveLoadService _saveLoadService = ServiceLocator.Instance.Get<ISaveLoadService>();
+        private IGridService _gridService = ServiceLocator.Instance.Get<IGridService>();
+        private IUIService _uiService = ServiceLocator.Instance.Get<IUIService>();
         
         public bool IsPlacing => _previewBuilding != null;
 
@@ -36,16 +39,19 @@ namespace Game.Buildings.Core
 
         private void OnEnable()
         {
-            placeAction?.action?.Enable();
-            cancelAction?.action?.Enable();
-            rotateAction?.action?.Enable();
+            EnableControls(true);
         }
 
         private void OnDisable()
         {
-            placeAction?.action?.Disable();
-            cancelAction?.action?.Disable();
-            rotateAction?.action?.Disable();
+            EnableControls(false);
+        }
+
+        public void BindServices(IUIService uiService,IGridService gridService, ISaveLoadService saveLoadService)
+        {
+            _uiService = uiService;
+            _gridService = gridService;
+            _saveLoadService =  saveLoadService;
         }
 
         private void Awake()
@@ -69,25 +75,13 @@ namespace Game.Buildings.Core
             }
 
             UpdatePreviewPositionAndValidity();
-            HandlePlacementInput();
-        }
-        
-        private void HandleGridCellClicked(Vector2Int cell)
-        {
-            IUIService uiService = ServiceLocator.Instance.Get<IUIService>();
-            IGridService gridService = ServiceLocator.Instance.Get<IGridService>();
-
-            if (!gridService.IsOccupied(cell))
-            {
-                uiService.ShowBuildingList(cell);
-            }
         }
 
         public void StartPlacement(Building buildingPrefab)
         {
             CancelPlacement();
 
-            if (buildingPrefab == null || _gridService == null)
+            if (buildingPrefab == null)
             {
                 return;
             }
@@ -100,6 +94,9 @@ namespace Game.Buildings.Core
             _previewRenderers = _previewBuilding.GetComponentsInChildren<Renderer>();
 
             ApplyPreviewColor(invalidPreviewColor);
+            EnableControls(true);
+            _gridService?.EnableGridClick(false);
+            _uiService?.ShowBuildMode();
         }
 
         public void CancelPlacement()
@@ -113,15 +110,10 @@ namespace Game.Buildings.Core
             _selectedPrefab = null;
             _previewRenderers = null;
             _rotationSteps = 0;
-        }
 
-        private void HandleRotationInput()
-        {
-            if (rotateAction?.action != null && rotateAction.action.WasPressedThisFrame())
-            {
-                _rotationSteps = (_rotationSteps + 1) % 4;
-                _previewBuilding.SetPlacementRotation(_rotationSteps);
-            }
+            EnableControls(false);
+            _gridService?.EnableGridClick(true);
+            _uiService?.ShowHUD();
         }
 
         private void UpdatePreviewPositionAndValidity()
@@ -146,29 +138,6 @@ namespace Game.Buildings.Core
             ApplyPreviewColor(_canPlaceCurrentCell ? validPreviewColor : invalidPreviewColor);
         }
 
-        private void HandlePlacementInput()
-        {
-            if (cancelAction?.action != null && cancelAction.action.WasPressedThisFrame())
-            {
-                CancelPlacement();
-                return;
-            }
-
-            if (placeAction?.action == null || !placeAction.action.WasPressedThisFrame() || !_canPlaceCurrentCell)
-            {
-                return;
-            }
-
-            Building placedBuilding = Instantiate(_selectedPrefab);
-            placedBuilding.SetPlacementRotation(_rotationSteps);
-            if (TryPlace(placedBuilding, _currentCell))
-            {
-                return;
-            }
-
-            Destroy(placedBuilding.gameObject);
-        }
-
         public bool TryPlace(Building building, Vector2Int originCell, BuildingSaveData record = null)
         {
             if (!_gridService.TryPlaceAtCell(originCell, building.Footprint))
@@ -178,7 +147,6 @@ namespace Game.Buildings.Core
 
             SnapToGridCenter(building, originCell);
             building.Place(originCell, building.Data, record);
-            _saveLoadService.SaveBuilding(building);
             return true;
         }
         
@@ -186,8 +154,7 @@ namespace Game.Buildings.Core
         {
             Vector3 baseCenter = _gridService.GetCellCenterWorld(originCell);
             Vector3 footprintOffset = new Vector3(
-                (building.Footprint.x - 1) * _gridService.CellSize * 0.5f,
-                0f,
+                (building.Footprint.x - 1) * _gridService.CellSize * 0.5f, 0f, 
                 (building.Footprint.y - 1) * _gridService.CellSize * 0.5f);
 
             building.transform.position = baseCenter + footprintOffset;
@@ -226,7 +193,7 @@ namespace Game.Buildings.Core
                 return false;
             }
 
-            if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+            if (EventSystem.current.IsPointerOverGameObject())
             {
                 return false;
             }
@@ -246,8 +213,7 @@ namespace Game.Buildings.Core
         {
             Vector3 baseCenter = _gridService.GetCellCenterWorld(originCell);
             Vector3 footprintOffset = new Vector3(
-                (footprint.x - 1) * _gridService.CellSize * 0.5f,
-                0f,
+                (footprint.x - 1) * _gridService.CellSize * 0.5f, 0f,
                 (footprint.y - 1) * _gridService.CellSize * 0.5f);
 
             return baseCenter + footprintOffset;
@@ -269,6 +235,52 @@ namespace Game.Buildings.Core
                 }
 
                 rendererRef.material.color = color;
+            }
+        }
+        
+        private void EnableControls(bool enable)
+        {
+            if (enable)
+            {
+                placeAction.action.performed += HandlePlaceInput;
+                cancelAction.action.performed += HandleCancelInput;
+                rotateAction.action.performed += HandleRotationInput;
+            }
+            else
+            {
+                placeAction.action.performed -= HandlePlaceInput;
+                cancelAction.action.performed -= HandleCancelInput;
+                rotateAction.action.performed -= HandleRotationInput;
+            }
+        }
+
+        private void HandlePlaceInput(InputAction.CallbackContext context)
+        {
+            if (context.interaction is TapInteraction && _canPlaceCurrentCell)
+            {
+                Building placedBuilding = Instantiate(_selectedPrefab);
+                placedBuilding.SetPlacementRotation(_rotationSteps);
+                if (TryPlace(placedBuilding, _currentCell))
+                {
+                    _saveLoadService.SaveBuilding(placedBuilding);
+                }
+
+                CancelPlacement();
+            }
+        }
+
+        private void HandleCancelInput(InputAction.CallbackContext context)
+        {
+            if (context.interaction is TapInteraction) 
+                CancelPlacement();
+        }
+
+        private void HandleRotationInput(InputAction.CallbackContext context)
+        {
+            if (context.interaction is PressInteraction)
+            {
+                _rotationSteps = (_rotationSteps + 1) % 4;
+                _previewBuilding.SetPlacementRotation(_rotationSteps);
             }
         }
     }

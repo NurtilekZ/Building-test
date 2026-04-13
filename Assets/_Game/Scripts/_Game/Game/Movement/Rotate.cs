@@ -33,18 +33,12 @@ namespace Game.Movement
 
         private void OnEnable()
         {
-            EnableAction(lookDeltaAction);
-            EnableAction(rotateHoldAction);
-            EnableAction(rotateLeftKey);
-            EnableAction(rotateRightKey);
+            EnableControls(true); 
         }
-
+        
         private void OnDisable()
         {
-            DisableAction(lookDeltaAction);
-            DisableAction(rotateHoldAction);
-            DisableAction(rotateLeftKey);
-            DisableAction(rotateRightKey);
+            EnableControls(false);
         }
 
         private void Awake()
@@ -102,12 +96,12 @@ namespace Game.Movement
 
             if (rotateLeftKey.action.IsPressed())
             {
-                yawDirection -= 1f;
+                yawDirection += 1f;
             }
 
             if (rotateRightKey.action.IsPressed())
             {
-                yawDirection += 1f;
+                yawDirection -= 1f;
             }
             
             return yawDirection * keyboardYawSpeed * Time.deltaTime;
@@ -165,14 +159,22 @@ namespace Game.Movement
             return rawPitch;
         }
         
-        private static void EnableAction(InputActionReference actionReference)
+        private void EnableControls(bool enable)
         {
-            actionReference?.action?.Enable();
-        }
-
-        private static void DisableAction(InputActionReference actionReference)
-        {
-            actionReference?.action?.Disable();
+            if (enable)
+            {
+                rotateHoldAction.action.Enable();
+                rotateLeftKey.action.Enable();
+                rotateRightKey.action.Enable();
+                lookDeltaAction.action.Enable();
+            }
+            else
+            {
+                rotateHoldAction.action.Disable();
+                rotateLeftKey.action.Disable();
+                rotateRightKey.action.Disable();
+                lookDeltaAction.action.Disable();
+            }
         }
         
         private static bool ReadButton(InputActionReference actionReference)

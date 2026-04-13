@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8578578062725240308}
   - component: {fileID: 5033695729133470730}
+  - component: {fileID: -7748488275893440762}
   m_Layer: 0
   m_Name: Tower
   m_TagString: Untagged
@@ -46,18 +47,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17e3e1d0afab42c380c480fc03b2ea95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Game.Features.Buildings.House
-  defaultData:
-    Id: 
+  _data:
     DisplayName: 
     Description: 
-    Model: {fileID: 0}
-    Icon: {fileID: 0}
+    Prefab: {fileID: 0}
+    Icon: []
     Footprint: {x: 0, y: 0}
-    BaseHealth: 0
     MaxLevel: 0
     BuildCost: 0
     UpgradeCostStep: 0
-  bindDefaultDataOnAwake: 1
+  _levelModels: []
+--- !u!65 &-7748488275893440762
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6182689540908560728}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 6, y: 6, z: 6}
+  m_Center: {x: 0, y: 2, z: 0}
 --- !u!1001 &238981174228453572
 PrefabInstance:
   m_ObjectHideFlags: 0

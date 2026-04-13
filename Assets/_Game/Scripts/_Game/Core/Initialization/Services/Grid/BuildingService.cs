@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Game.Assets;
 using Game.Buildings.Core;
 using Game.Buildings.Data;
@@ -10,21 +11,33 @@ namespace Core.Initialization.Services.Grid
     {
         private readonly BuildingPlacementManager _placementManager;
         private readonly BuildingsListSO _buildingsList;
-        private readonly BuildingInteractor _buildingInteractor;
 
         public bool IsPlacing => _placementManager && _placementManager.IsPlacing;
         public event Action<BuildingData, Vector2Int> OnBuildingPlaced;
         
         private readonly IGridService _gridService = ServiceLocator.Instance.Get<IGridService>();
 
-        public BuildingService(
-            BuildingPlacementManager placementManager,
-            BuildingsListSO buildingsList,
-            BuildingInteractor buildingInteractor)
+        public BuildingService(BuildingPlacementManager placementManager, BuildingsListSO buildingsList)
         {
             _placementManager = placementManager;
             _buildingsList = buildingsList;
-            _buildingInteractor = buildingInteractor;
+        }
+        
+        public void StartPlacement(BuildingData buildingData)
+        {
+            var buildingPrefab = _buildingsList.buildings.First(x=> x.DisplayName == buildingData.DisplayName).Prefab.GetComponent<Building>();
+            if (buildingPrefab != null)
+            {
+                _placementManager.enabled = true;
+                _placementManager.StartPlacement(buildingPrefab);
+            }
+        }
+
+        public void CancelCurrentPlacement()
+        {
+            _placementManager?.CancelPlacement();
+            if (_placementManager != null) 
+                _placementManager.enabled = false;
         }
 
         public bool TryUpgrade(Building building)
@@ -54,19 +67,14 @@ namespace Core.Initialization.Services.Grid
                 return false;
             }
 
-            Building building = _buildingInteractor.PlaceBuilding(data.Prefab, cell);
-            if (building != null)
+            Building building = data.Prefab.GetComponent<Building>();
+            if (_placementManager.TryPlace(building, cell))
             {
                 OnBuildingPlaced?.Invoke(data, cell);
                 return true;
             }
 
             return false;
-        }
-
-        public void CancelCurrentPlacement()
-        {
-            _placementManager?.CancelPlacement();
         }
     }
 }
