@@ -11,11 +11,11 @@ namespace Core.UI.Windows.Map
         [SerializeField] private Button closeButton;
         [SerializeField] private GridUIRenderer _gridUIRenderer;
 
-        public event Action OnCloseBtnPress;
+        public override event Action OnCloseClicked;
         
         private void Awake()
         {
-            closeButton.onClick.AddListener(() => OnCloseBtnPress?.Invoke());
+            closeButton.onClick.AddListener(() => OnCloseClicked?.Invoke());
         }
 
         protected override void Render()

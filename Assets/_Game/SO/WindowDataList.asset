@@ -23,6 +23,8 @@ MonoBehaviour:
     Prefab: {fileID: 6902369674440801181, guid: 02c3531a31554fc4889e1c7262d50e9b, type: 3}
   - Id: 4
     Prefab: {fileID: 1695354195024480987, guid: 936ebf8270fb43944bee781b9f5fb4f0, type: 3}
+  - Id: 5
+    Prefab: {fileID: 1316395973976561275, guid: e1bc80acea466804098e1f5cba0d103e, type: 3}
   overlayEntries:
   - Id: 5
     Prefab: {fileID: 1316395973976561275, guid: e1bc80acea466804098e1f5cba0d103e, type: 3}

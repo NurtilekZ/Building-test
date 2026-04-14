@@ -57,7 +57,10 @@ MonoBehaviour:
     MaxLevel: 0
     BuildCost: 0
     UpgradeCostStep: 0
-  _levelModels: []
+  _levelModels:
+  - {fileID: 1647652403588560169}
+  - {fileID: 7960301561197547606}
+  - {fileID: 7218088150919536072}
 --- !u!65 &-1460100211485912645
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -157,6 +160,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: a219455911288e84da9a9c5f55fd95c6, type: 3}
   m_PrefabInstance: {fileID: 1647652403588592521}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1647652403588560169 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: a219455911288e84da9a9c5f55fd95c6, type: 3}
+  m_PrefabInstance: {fileID: 1647652403588592521}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7218088150919437160
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -230,6 +238,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 003306f67c7bed24b8be307fb52fb0ab, type: 3}
+--- !u!1 &7218088150919536072 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: 003306f67c7bed24b8be307fb52fb0ab, type: 3}
+  m_PrefabInstance: {fileID: 7218088150919437160}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7218088150919561704 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 003306f67c7bed24b8be307fb52fb0ab, type: 3}
@@ -308,6 +321,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bf280570cf5dce45a29b84470a52c7e, type: 3}
+--- !u!1 &7960301561197547606 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: 9bf280570cf5dce45a29b84470a52c7e, type: 3}
+  m_PrefabInstance: {fileID: 7960301561197582070}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7960301561197710454 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 9bf280570cf5dce45a29b84470a52c7e, type: 3}

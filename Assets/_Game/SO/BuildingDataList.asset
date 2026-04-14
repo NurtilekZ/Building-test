@@ -19,7 +19,7 @@ MonoBehaviour:
     Icon:
     - {fileID: 21300000, guid: 53ad16bcb41076a4ca67c6dcf75506b9, type: 3}
     Footprint: {x: 1, y: 1}
-    MaxLevel: 3
+    MaxLevel: 1
     BuildCost: 0
     UpgradeCostStep: 0
   - DisplayName: Barrack

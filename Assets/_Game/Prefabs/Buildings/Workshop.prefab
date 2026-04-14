@@ -49,15 +49,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Game.Features.Buildings.House
   _data:
-    DisplayName: 
-    Description: 
-    Prefab: {fileID: 0}
-    Icon: []
-    Footprint: {x: 0, y: 0}
-    MaxLevel: 0
-    BuildCost: 0
-    UpgradeCostStep: 0
-  _levelModels: []
+    DisplayName: Workshow
+    Description: Workshop is used for creating new weapons and inventions
+    Prefab: {fileID: 6182689540908560728}
+    Icon:
+    - {fileID: 21300000, guid: c77ccfd7c4425464ebfad7eef39d91fb, type: 3}
+    - {fileID: 21300000, guid: 087c768f955fd8b48b779625b74a9836, type: 3}
+    - {fileID: 21300000, guid: 726bbc1f6d5693442ba385aff21fc317, type: 3}
+    Footprint: {x: 2, y: 2}
+    MaxLevel: 3
+    BuildCost: 20
+    UpgradeCostStep: 2
+  _levelModels:
+  - {fileID: 3320889583669772319}
+  - {fileID: 7938965091434765202}
+  - {fileID: 5530008903868662212}
 --- !u!65 &1983477129431108711
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -157,6 +163,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 06905b5e993435c4e9526f63c49622e3, type: 3}
   m_PrefabInstance: {fileID: 3320889583669806783}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &3320889583669772319 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: 06905b5e993435c4e9526f63c49622e3, type: 3}
+  m_PrefabInstance: {fileID: 3320889583669806783}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5530008903868696420
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -235,6 +246,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: a43f0d6131f84de40b182eb70bb23b87, type: 3}
   m_PrefabInstance: {fileID: 5530008903868696420}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &5530008903868662212 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: a43f0d6131f84de40b182eb70bb23b87, type: 3}
+  m_PrefabInstance: {fileID: 5530008903868696420}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7938965091434863922
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -308,6 +324,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5573396f6b8833f4dbd78bbb53d56df5, type: 3}
+--- !u!1 &7938965091434765202 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: 5573396f6b8833f4dbd78bbb53d56df5, type: 3}
+  m_PrefabInstance: {fileID: 7938965091434863922}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7938965091434989490 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 5573396f6b8833f4dbd78bbb53d56df5, type: 3}

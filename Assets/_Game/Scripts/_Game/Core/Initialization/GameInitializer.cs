@@ -104,18 +104,10 @@ namespace Core.Initialization
             _saveLoadService = locator.Register<ISaveLoadService>(new SaveLoadService(gridManager, _placementManager, _buildingsList, _clearSavesOnLoad));
         }
 
-        [ContextMenu("Save Buildings")]
         public void SaveBuildings()
         {
             ServiceLocator.Instance.Get<ISaveLoadService>().SaveBuildings();
         }
-        
-        [ContextMenu("Load Buildings")]
-        public void LoadBuildings()
-        {
-            ServiceLocator.Instance.Get<ISaveLoadService>().LoadBuildings();
-        }
-
 
         private void OnApplicationQuit()
         {

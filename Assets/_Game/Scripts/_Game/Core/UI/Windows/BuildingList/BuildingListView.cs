@@ -17,19 +17,21 @@ namespace Core.UI.Windows.BuildingList
         
         private BuildingData _selectedBuilding;
 
-        public event Action OnCloseBtnPress;
+        public override event Action OnCloseClicked;
         public event Action<BuildingData> OnStartBuild;
 
         private readonly List<BuildingItemView> _buildingItems = new();
 
+
         private void Awake()
         {
-            _closeBtn.onClick.AddListener(() => OnCloseBtnPress?.Invoke());
+            _closeBtn.onClick.AddListener(() => OnCloseClicked?.Invoke());
             _buildBtn.onClick.AddListener(() => OnStartBuild?.Invoke(_selectedBuilding));
         }
 
         protected override void Render()
         {
+            _buildBtn.interactable = false;
             if (_listContainer.childCount != 0) return;
             foreach (var buildingData in Model.BuildingDataList)
             {
@@ -44,13 +46,14 @@ namespace Core.UI.Windows.BuildingList
         private void SetSelectedBuilding(BuildingData building)
         {
             _selectedBuilding = building;
+            _buildBtn.interactable = true;
         }
 
         protected override void OnDestroy()
         {
-            base.OnDestroy();
             _closeBtn.onClick.RemoveAllListeners();
             _buildBtn.onClick.RemoveAllListeners();
+            base.OnDestroy();
         }
 
         public override void Dispose()

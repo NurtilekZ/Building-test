@@ -13,12 +13,12 @@ namespace Core.UI.Windows.BuildingInfo
         [SerializeField] private TMP_Text _currentLevelText;
         [SerializeField] private Image _image;
         [SerializeField] private Button _closeBtn;
-        
-        public event Action OnCloseClick;
+
+        public override event Action OnCloseClicked;
 
         private void Awake()
         {
-            _closeBtn.onClick.AddListener(() => OnCloseClick?.Invoke());
+            _closeBtn.onClick.AddListener(() => OnCloseClicked?.Invoke());
         }
 
         protected override void Render()
@@ -28,7 +28,7 @@ namespace Core.UI.Windows.BuildingInfo
             _descriptionText.text = buildingData.Description;
             var currentLevel = Model.Building.CurrentLevel;
             var maxLevel = buildingData.MaxLevel;
-            _currentLevelText.text = $"Level {(currentLevel == maxLevel ? "MAX" : maxLevel.ToString())}";
+            _currentLevelText.text = $"Level {(currentLevel == maxLevel ? "MAX" : currentLevel.ToString())}";
             _image.sprite = buildingData.Icon[currentLevel - 1];
         }
 

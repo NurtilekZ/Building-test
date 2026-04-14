@@ -11,31 +11,23 @@ namespace Core.UI.Windows.BuildingList
         protected override WindowID windowId => WindowID.BuildingsList;
 
         private readonly IBuildingService _buildingService = ServiceLocator.Instance.Get<IBuildingService>();
+        private readonly IGridService _gridService = ServiceLocator.Instance.Get<IGridService>();
 
         public override void Open()
         {
             base.Open();
-            View.OnCloseBtnPress += OnClickClose;
             View.OnStartBuild += StartPlacement;
         }
 
         public override void Close()
         {
-            base.Close();
-            View.OnCloseBtnPress -= OnClickClose;
             View.OnStartBuild -= StartPlacement;
+            base.Close();
         }
-
         private void StartPlacement(BuildingData buildingData)
         {
-            IGridService gridService = ServiceLocator.Instance.Get<IGridService>();
-            Vector2Int footprint = buildingData.GetSafeFootprint();
-
-            if (gridService.CanPlaceAtCell(Model.SelectedCell, footprint))
-            {
-                _buildingService.StartPlacement(buildingData);
-                _uiService.CloseWindow(WindowID.BuildingsList);
-            }
+            _buildingService.StartPlacement(buildingData);
+            _uiService.CloseWindow(WindowID.BuildingsList);
         }
     }
 }

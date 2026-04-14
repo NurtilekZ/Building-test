@@ -47,15 +47,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Game.Features.Buildings.House
   _data:
-    DisplayName: 
-    Description: 
-    Prefab: {fileID: 0}
-    Icon: []
-    Footprint: {x: 0, y: 0}
-    MaxLevel: 0
+    DisplayName: House
+    Description: House for people to live in
+    Prefab: {fileID: 6182689540908560728}
+    Icon:
+    - {fileID: 21300000, guid: 53ad16bcb41076a4ca67c6dcf75506b9, type: 3}
+    Footprint: {x: 1, y: 1}
+    MaxLevel: 1
     BuildCost: 0
     UpgradeCostStep: 0
-  _levelModels: []
+  _levelModels:
+  - {fileID: 2986717003104878705}
 --- !u!65 &-3665847248536032356
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -137,5 +139,10 @@ PrefabInstance:
 --- !u!4 &2986717003104394321 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 05035b78d90b21f43854dfe010ccd289, type: 3}
+  m_PrefabInstance: {fileID: 2986717003104782033}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2986717003104878705 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: 05035b78d90b21f43854dfe010ccd289, type: 3}
   m_PrefabInstance: {fileID: 2986717003104782033}
   m_PrefabAsset: {fileID: 0}

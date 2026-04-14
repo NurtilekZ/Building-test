@@ -78,13 +78,6 @@ namespace Game.Grid
 
                 if (Physics.Raycast(ray, out RaycastHit hit, 1000f))
                 {
-                    Building building = hit.collider.GetComponent<Building>();
-                    if (building)
-                    {
-                        building.Interact();
-                        return;
-                    }
-                    
                     PointerEventData eventData = new PointerEventData(EventSystem.current);
                     eventData.position = mousePosition;
 
@@ -92,9 +85,21 @@ namespace Game.Grid
                     EventSystem.current.RaycastAll(eventData, results);
 
                     bool isOverUI = results.Count > 0;
+
+                    if (isOverUI)
+                    {
+                        return;
+                    }
+
+                    Building building = hit.collider.GetComponent<Building>();
+                    if (building)
+                    {
+                        building.Interact();
+                        return;
+                    }
                     
                     Vector2Int cell = WorldToCell(hit.point);
-                    if (IsInBounds(cell) && !isOverUI)
+                    if (IsInBounds(cell))
                     {
                         OnCellClicked?.Invoke(cell);
                     }

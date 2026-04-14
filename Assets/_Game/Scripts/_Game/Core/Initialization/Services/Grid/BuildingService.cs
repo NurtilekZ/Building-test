@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Game.Assets;
+using Game.Buildings;
 using Game.Buildings.Core;
 using Game.Buildings.Data;
 using UnityEngine;
@@ -43,7 +44,7 @@ namespace Core.Initialization.Services.Grid
 
         public bool TryUpgrade(Building building)
         {
-            return _placementManager.TryUpgrade(building);
+            return _placementManager.TryUpgrade((UpgradableBuilding)building);
         }
 
         public bool RemoveBuilding(Building building)

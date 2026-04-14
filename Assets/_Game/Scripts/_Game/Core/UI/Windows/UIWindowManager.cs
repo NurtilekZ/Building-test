@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Core.Initialization.SaveLoad;
 using Core.UI.CoreMVP;
-using Core.UI.CoreMVP.Overlay;
-using Core.UI.Overlays.BuildingActions;
+using Core.UI.Windows.BuildingActions;
 using Core.UI.Windows.BuildingInfo;
 using Core.UI.Windows.BuildingList;
 using Core.UI.Windows.BuildMode;
 using Core.UI.Windows.HUD;
 using Core.UI.Windows.Map;
 using Game.Assets;
-using Game.Buildings.Core;
 using Game.Movement;
 using UnityEngine;
 
@@ -29,6 +27,7 @@ namespace Core.UI.Windows
 
         [SerializeField] private RectTransform _windowRoot;
         [SerializeField] private WindowDataListOS _windows;
+        [SerializeField] private Camera _camera;
         [SerializeField] private Move _move;
         [SerializeField] private Rotate _rotate;
 
@@ -40,15 +39,8 @@ namespace Core.UI.Windows
         {
             BuildWindowMap();
         }
-        
-        public void OpenOverlay(WindowID id, Model model, Transform targetTransform)
-        {
-            IController overlay = OpenWindow(id, model);
-            if (overlay != null)
-                ((IOverlayController)overlay).BindTransform(targetTransform);
-        }
 
-        public IController OpenWindow(WindowID id, Model model, bool disableControls = true, bool closeOthers = false)
+        public IController OpenWindow(WindowID id, Model model, bool disableCameraControls = true, bool closeOthers = false)
         {
             if (closeOthers)
             {
@@ -60,7 +52,7 @@ namespace Core.UI.Windows
                 existingWindow.Bind(model);
                 existingWindow.Open();
                 
-                EnableControls(!disableControls);
+                EnableControls(!disableCameraControls);
 
                 return existingWindow;
             }
@@ -75,7 +67,7 @@ namespace Core.UI.Windows
                 WindowID.Map => new MapController(),
                 
                 // Overlay
-                WindowID.ActionsOverlay => new ActionsOverlayController(),
+                WindowID.ActionsOverlay => new BuildingActionsController(),
                 _ => throw new ArgumentOutOfRangeException(nameof(controller))
             };
 
@@ -90,7 +82,7 @@ namespace Core.UI.Windows
             controller.Open();
             _cachedWindows[id] = controller;
             
-            EnableControls(!disableControls);
+            EnableControls(!disableCameraControls);
 
             return controller;
         }

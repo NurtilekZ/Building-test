@@ -36,6 +36,7 @@ namespace Core.Initialization.Services
         bool TryLoadFromStartupMode(GameInitializer.StartupLoadMode loadMode);
         void SaveBuilding(Building building);
         void RemoveFromSaveList(Building building);
+        void ClearPlacedBuildingsInScene();
     }
 
     public interface IBuildingService : IService
@@ -55,9 +56,9 @@ namespace Core.Initialization.Services
         void ShowBuildingList(Vector2Int cell);
         void ShowMapWindow();
         void ShowBuildMode();
-        void ShowActionOverlay(Building building, Transform transform);
         void CloseWindow(WindowID id);
         void ShowBuildingInfo(Building building);
         void ShowHUD();
+        void ShowActionsWindow(Building building);
     }
 }

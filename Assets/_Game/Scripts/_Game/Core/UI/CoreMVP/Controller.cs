@@ -11,11 +11,10 @@ namespace Core.UI.CoreMVP
         public TView View { get; private set; }
 
         protected abstract WindowID windowId { get; }
-
+        
         protected readonly IUIService _uiService = ServiceLocator.Instance.Get<IUIService>();
-
         protected readonly List<IDisposable> _disposableList = new();
-
+        
         public bool IsOpen { get; private set; }
 
         public virtual void Bind(Model model, IView view = null)
@@ -31,17 +30,19 @@ namespace Core.UI.CoreMVP
         {
             View.Bind(Model);
             View.Show();
-            IsOpen = true;
+            View.OnCloseClicked += OnClickClose;
+            IsOpen =  true;
         }
 
         public virtual void Close()
         {
+            View.OnCloseClicked -= OnClickClose;
             View.Hide();
             IsOpen = false;
             Dispose();
         }
 
-        protected virtual void OnClickClose()
+        protected void OnClickClose()
         {
             _uiService.CloseWindow(windowId);
         }

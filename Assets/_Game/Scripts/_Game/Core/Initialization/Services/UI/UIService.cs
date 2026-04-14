@@ -33,18 +33,12 @@ namespace Core.Initialization.Services.UI
 
         public void ShowMapWindow()
         {
-            MapModel model = new MapModel();
-            _windowManager.OpenWindow(WindowID.Map, model, closeOthers: false);
+            _windowManager.OpenWindow(WindowID.Map, new MapModel(), closeOthers: false);
         }
 
         public void ShowBuildMode()
         {
             _windowManager.OpenWindow(WindowID.BuildingMode, new BuildModeModel(), false);
-        }
-
-        public void ShowActionOverlay(Building building, Transform transform)
-        {
-            _windowManager.OpenOverlay(WindowID.ActionsOverlay, new BuildingInfoModel(building), transform);
         }
 
         public void CloseWindow(WindowID id)
@@ -54,13 +48,17 @@ namespace Core.Initialization.Services.UI
 
         public void ShowBuildingInfo(Building building)
         {
-            BuildingInfoModel model = new BuildingInfoModel(building);
-            _windowManager.OpenWindow(WindowID.BuildingInfo, model);
+            _windowManager.OpenWindow(WindowID.BuildingInfo, new BuildingInfoModel(building));
         }
 
         public void ShowHUD()
         {
             _windowManager.OpenWindow(WindowID.HUD, new HUDModel(), false, true);
+        }
+
+        public void ShowActionsWindow(Building building)
+        {
+            _windowManager.OpenWindow(WindowID.ActionsOverlay, new BuildingInfoModel(building));
         }
 
         public void Dispose()

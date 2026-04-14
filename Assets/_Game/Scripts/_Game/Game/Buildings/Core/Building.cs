@@ -9,13 +9,14 @@ namespace Game.Buildings.Core
     public abstract class Building : MonoBehaviour, IBuilding
     {
         [Header("Defaults")]
-        [SerializeField][ReadOnly] private BuildingData _data;
+        [SerializeField][ReadOnly]
+        protected BuildingData _data;
         [SerializeField] private GameObject[] _levelModels;
 
         public string Id { get; private set; }
 
         public BuildingData Data => _data;
-        public int CurrentLevel { get; private set; } = 1;
+        public int CurrentLevel { get; protected set; } = 1;
         public bool IsPlaced { get; private set; }
         public Vector2Int OriginCell { get; private set; }
         public Vector2Int Footprint => GetRotatedFootprint(_data.GetSafeFootprint(), PlacementRotationSteps);
@@ -35,16 +36,14 @@ namespace Game.Buildings.Core
         public void RestoreProgress(BuildingSaveData saveData)
         {
             Id = saveData.Id;
-            
             SetPlacementRotation(saveData.RotationSteps);
             CurrentLevel = saveData.Level;
-            SetLevelModel(CurrentLevel);
+            SetLevelModel();
         }
 
         public virtual void Interact()
         {
-            // TryUpgrade();
-            ServiceLocator.Instance.Get<IUIService>().ShowActionOverlay(this, transform);
+            ServiceLocator.Instance.Get<IUIService>().ShowActionsWindow(this);
         }
 
         private static Vector2Int GetRotatedFootprint(Vector2Int footprint, int quarterTurns)
@@ -63,9 +62,7 @@ namespace Game.Buildings.Core
             _data = buildingData;
             if (record != null)
             {
-                Id = record.Id;
-                CurrentLevel = record.Level;
-                SetPlacementRotation(record.RotationSteps);
+                RestoreProgress(record);
             }
             else
             {
@@ -79,36 +76,18 @@ namespace Game.Buildings.Core
 
         protected virtual void OnPlaced()
         {
-            SetLevelModel(CurrentLevel);
+            SetLevelModel();
         }
 
-        public bool CanUpgrade()
+        protected void SetLevelModel()
         {
-            return CurrentLevel < _data.GetSafeMaxLevel();
-        }
-
-        public int GetCurrentUpgradeCost()
-        {
-            return _data.GetUpgradeCostForLevel(CurrentLevel);
-        }
-
-        public bool Upgrade()
-        {
-            CurrentLevel++;
-            OnUpgraded(CurrentLevel);
-            return true;
-        }
-
-        protected virtual void OnUpgraded(int newLevel)
-        {
-            SetLevelModel(newLevel);
-        }
-
-        private void SetLevelModel(int newLevel)
-        {
-            foreach (var levelModel in _levelModels)
+            if (_data.GetSafeMaxLevel() == 1)
             {
-                levelModel.SetActive(CurrentLevel == newLevel);
+                return;
+            }
+            for (var i = 0; i < _levelModels.Length; i++)
+            {
+                _levelModels[i].SetActive(i == CurrentLevel - 1);
             }
         }
 

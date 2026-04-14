@@ -11,6 +11,8 @@ namespace Core.UI.CoreMVP
         public bool IsOpen { get; private set; }
         
         protected readonly List<IDisposable> _disposableList = new();
+        
+        public abstract event Action OnCloseClicked;
 
         public virtual void Bind(IModel model)
         {
@@ -21,8 +23,6 @@ namespace Core.UI.CoreMVP
             {
                 Model.Changed += HandleModelChanged;
             }
-
-            Render();
         }
 
         public virtual void Show()

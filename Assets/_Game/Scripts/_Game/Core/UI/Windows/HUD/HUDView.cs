@@ -12,6 +12,7 @@ namespace Core.UI.Windows.HUD
     public class HUDView : View<HUDModel>
     {
         [SerializeField] private Button _mapBtn;
+        [SerializeField] private Button _clearGridBtn;
         [SerializeField] private GridUIRenderer _gridUIRenderer;
         [SerializeField] private InputActionReference _moveAction;
         [SerializeField] private InputActionReference _rotateR;
@@ -20,9 +21,12 @@ namespace Core.UI.Windows.HUD
         [SerializeField] private Toggle _rotateRIndicator;
         [SerializeField] private Toggle _rotateLIndicator;
         
+        public override event Action OnCloseClicked;
         public event Action OnMapBtnClick;
+        public event Action OnClearBtnClick;
 
         private readonly IBuildingService _buildingService = ServiceLocator.Instance.Get<IBuildingService>();
+
 
         private void OnEnable()
         {
@@ -55,6 +59,7 @@ namespace Core.UI.Windows.HUD
         private void Awake()
         {
             _mapBtn.onClick.AddListener(() => OnMapBtnClick?.Invoke());
+            _clearGridBtn.onClick.AddListener(() => OnClearBtnClick?.Invoke());
         }
 
         private void Start()
@@ -86,6 +91,7 @@ namespace Core.UI.Windows.HUD
         {
             base.OnDestroy();
             _mapBtn.onClick.RemoveAllListeners();
+            _clearGridBtn.onClick.RemoveAllListeners();
         }
     }
 }

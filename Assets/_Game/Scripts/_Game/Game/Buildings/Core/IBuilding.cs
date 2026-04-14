@@ -1,7 +1,5 @@
 using Core.Initialization.SaveLoad;
-using Core.Initialization.Services.Grid;
 using Game.Buildings.Data;
-using Game.Grid;
 using Vector2Int = UnityEngine.Vector2Int;
 
 namespace Game.Buildings.Core
@@ -19,7 +17,5 @@ namespace Game.Buildings.Core
         void RestoreProgress(BuildingSaveData saveData);
 
         void Interact();
-        bool CanUpgrade();
-        int GetCurrentUpgradeCost();
     }
 }

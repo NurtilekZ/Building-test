@@ -165,7 +165,7 @@ namespace Game.Buildings.Core
             return true;
         }
 
-        public bool TryUpgrade(Building building)
+        public bool TryUpgrade(UpgradableBuilding building)
         {
             if (!building.CanUpgrade())
             {
@@ -174,7 +174,7 @@ namespace Game.Buildings.Core
 
             if (building.Upgrade())
             {
-                _saveLoadService.SaveBuildings();
+                
             }
             return true;
         }

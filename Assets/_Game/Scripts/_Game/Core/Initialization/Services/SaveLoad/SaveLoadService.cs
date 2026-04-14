@@ -47,6 +47,7 @@ namespace Core.Initialization.Services.SaveLoad
             }
         }
         
+        [ContextMenu("Save Buildings")]
         public void SaveBuildings()
         {
             GameSaveData saveData = CollectCurrentState();
@@ -54,7 +55,8 @@ namespace Core.Initialization.Services.SaveLoad
             File.WriteAllText(SaveFilePath, json);
             Debug.Log($"Saved {saveData.Buildings.Count} buildings to {SaveFilePath}");
         }
-
+        
+        [ContextMenu("Load Buildings")]
         public void LoadBuildings()
         {
             TryLoadBuildings();
@@ -184,12 +186,11 @@ namespace Core.Initialization.Services.SaveLoad
                     continue;
                 }
 
-                instance.RestoreProgress(record);
                 SaveBuilding(instance);
             }
         }
 
-        private void ClearPlacedBuildingsInScene()
+        public void ClearPlacedBuildingsInScene()
         {
             foreach (var building in _allBuildings)
             {
@@ -200,6 +201,7 @@ namespace Core.Initialization.Services.SaveLoad
 
                 _buildingPlacementManager.RemoveFromGrid(building);
             }
+            _allBuildings.Clear();
         }
 
         public void Dispose()

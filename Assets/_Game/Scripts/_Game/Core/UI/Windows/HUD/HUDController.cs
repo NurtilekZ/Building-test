@@ -1,4 +1,5 @@
 ﻿using Core.Initialization.SaveLoad;
+using Core.Initialization.Services;
 using Core.UI.CoreMVP;
 
 namespace Core.UI.Windows.HUD
@@ -11,12 +12,19 @@ namespace Core.UI.Windows.HUD
         {
             base.Open();
             View.OnMapBtnClick += OpenMapWindow;
+            View.OnClearBtnClick += ClearGrid;
+        }
+
+        private void ClearGrid()
+        {
+            ServiceLocator.Instance.Get<ISaveLoadService>().ClearPlacedBuildingsInScene();
         }
 
         public override void Close()
         {
             base.Close();
             View.OnMapBtnClick -= OpenMapWindow;
+            View.OnClearBtnClick -= ClearGrid;
         }
 
         private void OpenMapWindow()

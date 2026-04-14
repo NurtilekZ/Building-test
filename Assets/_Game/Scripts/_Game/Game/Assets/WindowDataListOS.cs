@@ -8,6 +8,5 @@ namespace Game.Assets
     public class WindowDataListOS : ScriptableObject
     {
         public UIWindowManager.WindowEntry[] windowEntries;
-        public UIWindowManager.WindowEntry[] overlayEntries;
     }
 }

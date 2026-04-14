@@ -2,14 +2,15 @@
 using Core.Initialization.Services;
 using Core.UI.CoreMVP;
 using Core.UI.Windows.BuildingInfo;
+using Game.Buildings;
 using Game.Buildings.Core;
 
-namespace Core.UI.Overlays.BuildingActions
+namespace Core.UI.Windows.BuildingActions
 {
-    public class ActionsOverlayController : Controller<BuildingInfoModel, ActionsOverlayView>
+    public class BuildingActionsController : Controller<BuildingInfoModel, BuildingActionsView>
     {
         protected override WindowID windowId => WindowID.ActionsOverlay;
-        private IBuildingService _buildingService = ServiceLocator.Instance.Get<IBuildingService>();
+        private readonly IBuildingService _buildingService = ServiceLocator.Instance.Get<IBuildingService>();
 
         public override void Open()
         {
@@ -19,6 +20,15 @@ namespace Core.UI.Overlays.BuildingActions
             View.OnRemoveClick += Remove;
         }
 
+        public override void Close()
+        {
+            View.OnInfoClick -= OpenInfo;
+            View.OnUpgradeClick -= Upgrade;
+            View.OnRemoveClick -= Remove;
+            base.Close();
+        }
+   
+
         private void Remove(Building building)
         {
             if (_buildingService.RemoveBuilding(building))
@@ -27,7 +37,7 @@ namespace Core.UI.Overlays.BuildingActions
             }
         }
 
-        private void Upgrade(Building building)
+        private void Upgrade(UpgradableBuilding building)
         {
             if (_buildingService.TryUpgrade(building))
             { 

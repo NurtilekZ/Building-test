@@ -4625,7 +4625,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Game.Systems.UI.Windows.UIWindowManager
   _windowRoot: {fileID: 570499725}
+  _overlayRoot: {fileID: 510212386}
   _windows: {fileID: 11400000, guid: ca7dd29c55ba89b4e85252c4badc7ca3, type: 2}
+  _camera: {fileID: 1637906992}
   _move: {fileID: 1637907000}
   _rotate: {fileID: 1637906999}
 --- !u!4 &835798605
@@ -9099,7 +9101,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: -40
+  near clip plane: -20
   far clip plane: 200
   field of view: 60
   orthographic: 1
@@ -9128,7 +9130,7 @@ Transform:
   m_GameObject: {fileID: 1637906990}
   serializedVersion: 2
   m_LocalRotation: {x: 0.27781588, y: 0.36497167, z: -0.1150751, w: 0.8811196}
-  m_LocalPosition: {x: -8.9, y: 23, z: -8}
+  m_LocalPosition: {x: -13.3, y: 23.9, z: -13.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
