@@ -4625,7 +4625,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Game.Systems.UI.Windows.UIWindowManager
   _windowRoot: {fileID: 570499725}
-  _overlayRoot: {fileID: 510212386}
   _windows: {fileID: 11400000, guid: ca7dd29c55ba89b4e85252c4badc7ca3, type: 2}
   _camera: {fileID: 1637906992}
   _move: {fileID: 1637907000}
