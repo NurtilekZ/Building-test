@@ -44,7 +44,7 @@ namespace Core.Initialization.Services.UI
 
         public void ShowActionOverlay(Building building, Transform transform)
         {
-            _windowManager.OpenOverlay(WindowID.ActionsOverlay, building, transform);
+            _windowManager.OpenOverlay(WindowID.ActionsOverlay, new BuildingInfoModel(building), transform);
         }
 
         public void CloseWindow(WindowID id)
@@ -61,6 +61,11 @@ namespace Core.Initialization.Services.UI
         public void ShowHUD()
         {
             _windowManager.OpenWindow(WindowID.HUD, new HUDModel(), false, true);
+        }
+
+        public void Dispose()
+        {
+            
         }
     }
 }

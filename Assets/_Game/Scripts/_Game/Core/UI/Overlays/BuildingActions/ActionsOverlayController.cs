@@ -15,21 +15,30 @@ namespace Core.UI.Overlays.BuildingActions
         {
             base.Open();
             View.OnInfoClick += OpenInfo;
-            View.OnUpgradeClick += UpgradeBuilding;
+            View.OnUpgradeClick += Upgrade;
+            View.OnRemoveClick += Remove;
         }
 
-        private void UpgradeBuilding(Building building)
+        private void Remove(Building building)
+        {
+            if (_buildingService.RemoveBuilding(building))
+            {
+                Close();
+            }
+        }
+
+        private void Upgrade(Building building)
         {
             if (_buildingService.TryUpgrade(building))
-            {
-                _uiService.CloseWindow(WindowID.ActionsOverlay);
+            { 
+                Close();
             }
         }
 
         private void OpenInfo(Building building)
         {
-            _uiService.ShowBuildingInfo(building);
             Close();
+            _uiService.ShowBuildingInfo(building);
         }
     }
 }

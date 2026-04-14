@@ -7,31 +7,31 @@ namespace Core.UI.CoreMVP
         [SerializeField] private Vector3 worldOffset = new Vector3(0f, 2f, 0f);
         [SerializeField] private bool hideWhenOffscreen = true;
 
-        private Transform _target;
+        private Transform _targetTransform;
         private Camera _targetCamera;
         private CanvasGroup _canvasGroup;
         private RectTransform _rectTransform;
 
         protected virtual void Awake()
         {
+            _targetCamera = Camera.main;
             _canvasGroup = GetComponent<CanvasGroup>();
             _rectTransform = GetComponent<RectTransform>();
         }
 
-        public void Bind(Transform target, Camera targetCamera)
+        public void Bind(Transform targetTransform)
         {
-            _target = target;
-            _targetCamera = targetCamera;
+            _targetTransform = targetTransform;
         }
 
         private void LateUpdate()
         {
-            if (!_target || !_targetCamera)
+            if (!_targetTransform || !_targetCamera)
             {
                 return;
             }
 
-            Vector3 screenPoint = _targetCamera.WorldToScreenPoint(_target.position + worldOffset);
+            Vector3 screenPoint = _targetCamera.WorldToScreenPoint(_targetTransform.position + worldOffset);
             bool visible = screenPoint.z > 0f;
 
             if (hideWhenOffscreen && !visible)

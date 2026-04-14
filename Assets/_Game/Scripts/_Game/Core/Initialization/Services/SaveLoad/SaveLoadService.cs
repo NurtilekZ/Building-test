@@ -36,10 +36,6 @@ namespace Core.Initialization.Services.SaveLoad
         public void SaveBuilding(Building building)
         {
             _allBuildings.Add(building);
-            foreach (var b in _allBuildings)
-            { 
-                Debug.Log($"{b.Id} - {b.Data} - {b.CurrentLevel}");
-            }
         }
         
         public void RemoveFromSaveList(Building building)
@@ -171,7 +167,7 @@ namespace Core.Initialization.Services.SaveLoad
                     continue;
                 }
 
-                GameObject prefab = _buildingsList.buildings.First(x => x.DisplayName != record.DisplayName).Prefab;
+                GameObject prefab = _buildingsList.buildings.FirstOrDefault(x => x.DisplayName == record.DisplayName).Prefab;
 
                 if (!prefab)
                 {
@@ -204,6 +200,11 @@ namespace Core.Initialization.Services.SaveLoad
 
                 _buildingPlacementManager.RemoveFromGrid(building);
             }
+        }
+
+        public void Dispose()
+        {
+            
         }
     }
 }

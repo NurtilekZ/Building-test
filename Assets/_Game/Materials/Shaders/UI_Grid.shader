@@ -11,6 +11,13 @@ Shader "UI/GridOccupancy"
         _LineThickness("Line Thickness", Range(0.001,0.2)) = 0.02
 
         _OccupancyTex("Occupancy Texture", 2D) = "black" {}
+        
+        _Stencil("Stencil Reference", Float) = 0
+        _StencilComp("Stencil Comparison", Float) = 8
+        _StencilOp("Stencil Operation", Float) = 0
+        _StencilReadMask("Stencil Read Mask", Float) = 255
+        _StencilWriteMask("Stencil Write Mask", Float) = 255
+        _ColorMask("Color Mask", Float) = 15
     }
 
     SubShader
@@ -30,6 +37,17 @@ Shader "UI/GridOccupancy"
 
         Pass
         {
+            
+            Stencil
+            {
+                Ref [_Stencil]
+                Comp [_StencilComp]
+                Pass [_StencilOp]
+                ReadMask [_StencilReadMask]
+                WriteMask [_StencilWriteMask]
+            }
+            ColorMask [_ColorMask]
+            
             Name "UIGrid"
 
             HLSLPROGRAM

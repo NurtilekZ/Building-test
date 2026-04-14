@@ -21,6 +21,11 @@ namespace Game.Buildings.Core
         public Vector2Int Footprint => GetRotatedFootprint(_data.GetSafeFootprint(), PlacementRotationSteps);
         public int PlacementRotationSteps { get; private set; }
 
+        public void BindData(BuildingData data)
+        {
+            _data = data;
+        }
+
         public void SetPlacementRotation(int clockwiseQuarterTurns)
         {
             PlacementRotationSteps = ((clockwiseQuarterTurns % 4) + 4) % 4;

@@ -24,7 +24,7 @@ namespace Core.Initialization.Services
         void EnableGridClick(bool enable);
     }
 
-    public interface IService
+    public interface IService : IDisposable
     {
     }
 
@@ -47,6 +47,7 @@ namespace Core.Initialization.Services
         void CancelCurrentPlacement();
         bool TryBuildBuilding(BuildingData data, Vector2Int cell);
         bool TryUpgrade(Building building);
+        bool RemoveBuilding(Building building);
     }
 
     public interface IUIService : IService

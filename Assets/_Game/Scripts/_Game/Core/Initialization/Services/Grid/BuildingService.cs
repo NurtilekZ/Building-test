@@ -26,6 +26,7 @@ namespace Core.Initialization.Services.Grid
         public void StartPlacement(BuildingData buildingData)
         {
             var buildingPrefab = _buildingsList.buildings.First(x=> x.DisplayName == buildingData.DisplayName).Prefab.GetComponent<Building>();
+            buildingPrefab.BindData(buildingData);
             if (buildingPrefab != null)
             {
                 _placementManager.enabled = true;
@@ -43,6 +44,11 @@ namespace Core.Initialization.Services.Grid
         public bool TryUpgrade(Building building)
         {
             return _placementManager.TryUpgrade(building);
+        }
+
+        public bool RemoveBuilding(Building building)
+        {
+            return _placementManager.RemoveFromGrid(building);
         }
 
         public BuildingData[] GetAvailableBuildings()
@@ -68,6 +74,7 @@ namespace Core.Initialization.Services.Grid
             }
 
             Building building = data.Prefab.GetComponent<Building>();
+            building.BindData(data);
             if (_placementManager.TryPlace(building, cell))
             {
                 OnBuildingPlaced?.Invoke(data, cell);
@@ -75,6 +82,11 @@ namespace Core.Initialization.Services.Grid
             }
 
             return false;
+        }
+
+        public void Dispose()
+        {
+            
         }
     }
 }

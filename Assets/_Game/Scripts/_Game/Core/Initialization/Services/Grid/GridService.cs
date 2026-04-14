@@ -19,7 +19,7 @@ namespace Core.Initialization.Services.Grid
         public GridService(GridManager gridManager)
         {
             _gridManager = gridManager;
-            gridManager.OnCellClicked += NotifyCellClicked;
+            _gridManager.OnCellClicked += NotifyCellClicked;
         }
 
         public Vector2Int WorldToCell(Vector3 worldPosition)
@@ -66,8 +66,7 @@ namespace Core.Initialization.Services.Grid
         {
             _gridManager.EnableGridClick(enable);
         }
-
-
+        
         private void NotifyCellClicked(Vector2Int cell)
         {
             OnCellClicked?.Invoke(cell);
@@ -76,6 +75,11 @@ namespace Core.Initialization.Services.Grid
                 _uiService = ServiceLocator.Instance.Get<IUIService>();
             }
             _uiService.ShowBuildingList(cell);
+        }
+
+        public void Dispose()
+        {
+            _gridManager.OnCellClicked -= NotifyCellClicked;
         }
     }
 }

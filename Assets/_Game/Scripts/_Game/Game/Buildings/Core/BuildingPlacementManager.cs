@@ -15,9 +15,7 @@ namespace Game.Buildings.Core
         [SerializeField] private LayerMask placementSurfaceMask = ~0;
 
         [Header("Placement")]
-        [SerializeField] private Building defaultBuildingPrefab;
         [SerializeField] private float rayDistance = 1000f;
-        [SerializeField] private bool startPlacementOnAwake;
         [SerializeField] private InputActionReference placeAction;
         [SerializeField] private InputActionReference cancelAction;
         [SerializeField] private InputActionReference rotateAction;
@@ -59,11 +57,6 @@ namespace Game.Buildings.Core
             if (targetCamera == null)
             {
                 targetCamera = Camera.main;
-            }
-
-            if (startPlacementOnAwake && defaultBuildingPrefab != null)
-            {
-                StartPlacement(defaultBuildingPrefab);
             }
         }
 
@@ -160,15 +153,16 @@ namespace Game.Buildings.Core
             building.transform.position = baseCenter + footprintOffset;
         }
 
-        public void RemoveFromGrid(Building building)
+        public bool RemoveFromGrid(Building building)
         {
             if (!building.IsPlaced)
             {
-                return;
+                return false;
             }
 
             _gridService.RemoveAtCell(building.OriginCell, building.Footprint);
             building.Remove();
+            return true;
         }
 
         public bool TryUpgrade(Building building)

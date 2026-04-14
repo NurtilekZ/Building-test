@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Core.Initialization.SaveLoad;
 using Core.UI.CoreMVP;
+using Core.UI.CoreMVP.Overlay;
+using Core.UI.Overlays.BuildingActions;
 using Core.UI.Windows.BuildingInfo;
 using Core.UI.Windows.BuildingList;
 using Core.UI.Windows.BuildMode;
@@ -39,9 +41,11 @@ namespace Core.UI.Windows
             BuildWindowMap();
         }
         
-        public void OpenOverlay(WindowID actionsOverlay, Building building, Transform transform1)
+        public void OpenOverlay(WindowID id, Model model, Transform targetTransform)
         {
-            
+            IController overlay = OpenWindow(id, model);
+            if (overlay != null)
+                ((IOverlayController)overlay).BindTransform(targetTransform);
         }
 
         public IController OpenWindow(WindowID id, Model model, bool disableControls = true, bool closeOthers = false)
@@ -63,11 +67,15 @@ namespace Core.UI.Windows
 
             IController controller = id switch
             {
+                // Window
                 WindowID.HUD => new HUDController(),
                 WindowID.BuildingsList => new BuildingListController(),
                 WindowID.BuildingMode => new BuildModeController(),
                 WindowID.BuildingInfo => new BuildingInfoController(),
                 WindowID.Map => new MapController(),
+                
+                // Overlay
+                WindowID.ActionsOverlay => new ActionsOverlayController(),
                 _ => throw new ArgumentOutOfRangeException(nameof(controller))
             };
 
